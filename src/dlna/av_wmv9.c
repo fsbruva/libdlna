@@ -93,71 +93,71 @@ static wmv9_profile_t wmv9_profile_main_high[] = {
 /* Medium resolution video (Main profile at Medium Level)
    with baseline WMA audio */
 static dlna_profile_t wmvmed_base = {
-DOT_ID "WMVMED_BASE",
-DOT_MIME MIME_VIDEO_WMV,
-DOT_LABEL LABEL_VIDEO_SD
+  "WMVMED_BASE",
+   MIME_VIDEO_WMV,
+   LABEL_VIDEO_SD
 };
 
 /* Medium resolution video (Main profile at Medium Level)
    with full WMA audio */
 static dlna_profile_t wmvmed_full = {
-DOT_ID "WMVMED_FULL",
-DOT_MIME MIME_VIDEO_WMV,
-DOT_LABEL LABEL_VIDEO_SD
+   "WMVMED_FULL",
+  MIME_VIDEO_WMV,
+ LABEL_VIDEO_SD
 };
 
 /* Medium resolution video (Main profile at Medium Level)
    with WMA professional audio */
 static dlna_profile_t wmvmed_pro = {
-DOT_ID "WMVMED_PRO",
-DOT_MIME MIME_VIDEO_WMV,
-DOT_LABEL LABEL_VIDEO_HD
+  "WMVMED_PRO",
+   MIME_VIDEO_WMV,
+  LABEL_VIDEO_HD
 };
 
 /* High resolution video (Main profile at High Level)
    with full WMA audio */
 static dlna_profile_t wmvhigh_full = {
-DOT_ID "WMVHIGH_FULL",
-DOT_MIME MIME_VIDEO_WMV,
-DOT_LABEL LABEL_VIDEO_HD
+  "WMVHIGH_FULL",
+   MIME_VIDEO_WMV,
+ LABEL_VIDEO_HD
 };
 
 /* High resolution video (Main profile at High Level)
    with WMA professional audio */
 static dlna_profile_t wmvhigh_pro = {
-DOT_ID "WMVHIGH_PRO",
-DOT_MIME MIME_VIDEO_WMV,
-DOT_LABEL LABEL_VIDEO_HD
+  "WMVHIGH_PRO",
+  MIME_VIDEO_WMV,
+ LABEL_VIDEO_HD
 };
 
 /* HighMAT profile */
 static dlna_profile_t wmvhm_base dlna_unused = {
-DOT_ID "WMVHM_BASE",
-DOT_MIME MIME_VIDEO_WMV,
-DOT_LABEL LABEL_VIDEO_SD
+  "WMVHM_BASE",
+   MIME_VIDEO_WMV,
+  LABEL_VIDEO_SD
 };
 
 /* Low resolution video (Simple Profile at Low Level)
    with baseline WMA audio */
 static dlna_profile_t wmvspll_base = {
-DOT_ID "WMVSPLL_BASE",
-DOT_MIME MIME_VIDEO_WMV,
-DOT_LABEL LABEL_VIDEO_QCIF15
+  "WMVSPLL_BASE",
+   MIME_VIDEO_WMV,
+ LABEL_VIDEO_QCIF15
 };
 
 /* Low resolution video (Simple Profile at Medium Level)
    with baseline WMA audio */
 static dlna_profile_t wmvspml_base = {
-DOT_ID "WMVSPML_BASE",
-DOT_MIME MIME_VIDEO_WMV,
-DOT_LABEL LABEL_VIDEO_CIF15
+  "WMVSPML_BASE",
+   MIME_VIDEO_WMV,
+   LABEL_VIDEO_CIF15
 };
 
 /* Low resolution video (Simple Profile at Medium Level) with MP3 audio */
 static dlna_profile_t wmvspml_mp3 = {
-DOT_ID "WMVSPML_MP3",
-DOT_MIME MIME_VIDEO_WMV,
-DOT_LABEL LABEL_VIDEO_CIF15
+  "WMVSPML_MP3",
+  MIME_VIDEO_WMV,
+  LABEL_VIDEO_CIF15
 };
 
 static const struct {
@@ -220,11 +220,11 @@ wmv_video_profile_get (AVStream *vs, AVCodecContext *vc)
   if (is_valid_wmv9_video_profile (wmv9_profile_main_medium,
                                    sizeof (wmv9_profile_main_medium), vs, vc))
     return WMV_VIDEO_PROFILE_MAIN_MEDIUM;
-  
+
   if (is_valid_wmv9_video_profile (wmv9_profile_main_high,
                                    sizeof (wmv9_profile_main_high), vs, vc))
     return WMV_VIDEO_PROFILE_MAIN_HIGH;
-  
+
   return WMV_VIDEO_PROFILE_INVALID;
 }
 
@@ -239,20 +239,20 @@ probe_wmv9 (AVFormatContext *ctx dlna_unused,
 
   if (!stream_ctx_is_av (codecs))
     return NULL;
-  
+
   /* need to be in ASF container only */
   if (st != CT_ASF)
     return NULL;
 
   /* check for WMV3 (Simple and Main profiles) video codec */
-  if (codecs->vc->codec_id != CODEC_ID_WMV3)
+  if (codecs->vc->codec_id != AV_CODEC_ID_WMV3)
     return NULL;
 
   /* get video profile */
   vp = wmv_video_profile_get (codecs->vs, codecs->vc);
   if (vp == WMV_VIDEO_PROFILE_INVALID)
     return NULL;
-  
+
   /* get audio profile */
   ap = audio_profile_guess (codecs->ac);
   if (ap == AUDIO_PROFILE_INVALID)
@@ -268,9 +268,9 @@ probe_wmv9 (AVFormatContext *ctx dlna_unused,
 }
 
 dlna_registered_profile_t dlna_profile_av_wmv9 = {
-DOT_ID DLNA_PROFILE_AV_WMV9,
-DOT_CLASS DLNA_CLASS_AV,
-DOT_EXTENSIONS "asf,wmv",
-DOT_PROBE probe_wmv9,
-DOT_NEXT NULL
+  DLNA_PROFILE_AV_WMV9,
+  DLNA_CLASS_AV,
+  "asf,wmv",
+  probe_wmv9,
+ NULL
 };

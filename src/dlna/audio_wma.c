@@ -27,35 +27,35 @@
 
 /* WMA content (bit rate less than 193 kbps) */
 static dlna_profile_t wmabase = {
-DOT_ID "WMABASE",
-DOT_MIME MIME_AUDIO_WMA,
-DOT_LABEL LABEL_AUDIO_2CH
+  "WMABASE",
+   MIME_AUDIO_WMA,
+  LABEL_AUDIO_2CH
 };
 
 /* WMA content */
 static dlna_profile_t wmafull = {
-DOT_ID "WMAFULL",
-DOT_MIME MIME_AUDIO_WMA,
-DOT_LABEL LABEL_AUDIO_2CH
+   "WMAFULL",
+   MIME_AUDIO_WMA,
+   LABEL_AUDIO_2CH
 };
 
 /* WMA professional version */
 static dlna_profile_t wmapro = {
-DOT_ID "WMAPRO",
-DOT_MIME MIME_AUDIO_WMA,
-DOT_LABEL LABEL_AUDIO_2CH_MULTI
+  "WMAPRO",
+  MIME_AUDIO_WMA,
+  LABEL_AUDIO_2CH_MULTI
 };
 
 audio_profile_t
 audio_profile_guess_wma (AVCodecContext *ac)
 {
   audio_profile_t ap = AUDIO_PROFILE_INVALID;
-  
+
   if (!ac)
     return ap;
 
   /* check for WMA codec */
-  if (ac->codec_id != CODEC_ID_WMAV1 && ac->codec_id != CODEC_ID_WMAV2)
+  if (ac->codec_id != AV_CODEC_ID_WMAV1 && ac->codec_id != AV_CODEC_ID_WMAV2)
     return ap;
 
   if (ac->sample_rate <= 48000)
@@ -94,7 +94,7 @@ probe_wma (AVFormatContext *ctx dlna_unused,
   /* check for supported container */
   if (st != CT_ASF)
     return NULL;
-  
+
   switch (audio_profile_guess_wma (codecs->ac))
   {
   case AUDIO_PROFILE_WMA_BASELINE:
@@ -111,9 +111,9 @@ probe_wma (AVFormatContext *ctx dlna_unused,
 }
 
 dlna_registered_profile_t dlna_profile_audio_wma = {
-DOT_ID DLNA_PROFILE_AUDIO_WMA,
-DOT_CLASS DLNA_CLASS_AUDIO,
-DOT_EXTENSIONS "wma,asf",
-DOT_PROBE probe_wma,
-DOT_NEXT NULL
+  DLNA_PROFILE_AUDIO_WMA,
+   DLNA_CLASS_AUDIO,
+  "wma,asf",
+  probe_wma,
+   NULL
 };

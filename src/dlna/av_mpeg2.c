@@ -21,11 +21,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-#ifdef _WIN32
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -69,243 +64,249 @@ static mpeg_ts_stream_t mpeg_ts_valid_streams_eu_sd[] = {
   { 544, 576, 25, 1},
   { 480, 576, 25, 1},
   { 352, 576, 25, 1},
-  { 252, 288, 25, 1}
+  { 352, 288, 25, 1},
+  { 252, 288, 25, 1},
+  { 720, 576, 25, 1}
 };
 
 static mpeg_ts_stream_t mpeg_ts_valid_streams_na_sd[] = {
-  { 720, 480, 30, 1001},
-  { 704, 480, 30, 1001},
+  { 720, 480, 30000, 1001},
+  { 704, 480, 30000, 1001},
   { 704, 480, 30, 1},
-  { 704, 480, 24, 1001},
+  { 704, 480, 24000, 1001},
   { 704, 480, 24, 1},
-  { 640, 480, 30, 1001},
+  { 704, 480, 60, 1},
+  { 704, 480, 60000, 1001},
+  { 640, 480, 30000, 1001},
   { 640, 480, 30, 1},
-  { 640, 480, 24, 1001},
+  { 640, 480, 60, 1},
+  { 640, 480, 60000, 1001},
+  { 640, 480, 24000, 1001},
   { 640, 480, 24, 1},
-  { 544, 480, 30, 1001},
-  { 480, 480, 30, 1001},
-  { 352, 480, 30, 1001}
+  { 544, 480, 30000, 1001},
+  { 480, 480, 30000, 1001},
+  { 352, 480, 30000, 1001}
 };
 
 static mpeg_ts_stream_t mpeg_ts_valid_streams_na_hd[] = {
-  { 1920, 1080, 30, 1001},
+  { 1920, 1080, 30000, 1001},
   { 1920, 1080, 30, 1},
-  { 1920, 1080, 24, 1001},
+  { 1920, 1080, 24000, 1001},
   { 1920, 1080, 24, 1},
-  { 1280, 720, 30, 1001},
+  { 1280, 720, 30000, 1001},
   { 1280, 720, 30, 1},
-  { 1280, 720, 24, 1001},
+  { 1280, 720, 24000, 1001},
   { 1280, 720, 24, 1},
-  { 1440, 1080, 30, 1001},
+  { 1440, 1080, 30000, 1001},
   { 1440, 1080, 30, 1},
-  { 1440, 1080, 24, 1001},
+  { 1440, 1080, 24000, 1001},
   { 1440, 1080, 24, 1},
-  { 1280, 1080, 30, 1001},
+  { 1280, 1080, 30000, 1001},
   { 1280, 1080, 30, 1},
-  { 1280, 1080, 24, 1001},
+  { 1280, 1080, 24000, 1001},
   { 1280, 1080, 24, 1}
 };
 
 /* Profile for NTSC-formatted AV class media */
 static dlna_profile_t mpeg_ps_ntsc = {
-DOT_ID "MPEG_PS_NTSC",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_SD
+   "MPEG_PS_NTSC",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_SD
 };
 
 /* Profile for NTSC-formatted AV class media */
 static dlna_profile_t mpeg_ps_ntsc_xac3 = {
-DOT_ID "MPEG_PS_NTSC_XAC3",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_SD
+   "MPEG_PS_NTSC_XAC3",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_SD
 };
 
 /* Profile for PAL-formatted AV class media */
 static dlna_profile_t mpeg_ps_pal = {
-DOT_ID "MPEG_PS_PAL",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_SD
+   "MPEG_PS_PAL",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_SD
 };
 
 /* Profile for PAL-formatted AV class media */
 static dlna_profile_t mpeg_ps_pal_xac3 = {
-DOT_ID "MPEG_PS_PAL_XAC3",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_SD
+   "MPEG_PS_PAL_XAC3",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_SD
 };
 
 /* MPEG-2 Main Profile at Low Level AAC LC audio encapsulated in
    MPEG-2 transport stream with zero value timestamp */
 static dlna_profile_t mpeg_ts_mp_ll_aac = {
-DOT_ID "MPEG_TS_MP_LL_AAC",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "MPEG_TS_MP_LL_AAC",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF30
 };
 
 /* MPEG-2 Main Profile at Low Level AAC LC audio encapsulated in
    MPEG-2 transport stream with valid value timestamp */
 static dlna_profile_t mpeg_ts_mp_ll_aac_t = {
-DOT_ID "MPEG_TS_MP_LL_AAC_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "MPEG_TS_MP_LL_AAC_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF30
 };
 
 /* MPEG-2 Main Profile at Low Level AAC LC audio encapsulated in
    MPEG-2 transport stream without a Timestamp field */
 static dlna_profile_t mpeg_ts_mp_ll_aac_iso = {
-DOT_ID "MPEG_TS_MP_LL_AAC_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "MPEG_TS_MP_LL_AAC_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_CIF30
 };
 
 /* European region profile for Standard Definition AV class utilizing
    a DLNA Transport Packet with zero value timestamp */
 static dlna_profile_t mpeg_ts_sd_eu = {
-DOT_ID "MPEG_TS_SD_EU",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "MPEG_TS_SD_EU",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 /* European region profile for Standard Definition AV class utilizing
    a DLNA Transport Packet with a valid non-zero value timestamp */
 static dlna_profile_t mpeg_ts_sd_eu_t = {
-DOT_ID "MPEG_TS_SD_EU_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "MPEG_TS_SD_EU_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 /* European region profile for Standard Definition AV class utilizing
    a DLNA Transport Packet without a Timestamp field */
 static dlna_profile_t mpeg_ts_sd_eu_iso = {
-DOT_ID "MPEG_TS_SD_EU_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_SD
+   "MPEG_TS_SD_EU_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_SD
 };
 
 /* North America region profile for Standard Definition AV class utilizing
    a DLNA Transport Packet with zero value timestamp */
 static dlna_profile_t mpeg_ts_sd_na = {
-DOT_ID "MPEG_TS_SD_NA",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "MPEG_TS_SD_NA",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 /* North America region profile for Standard Definition AV class utilizing
    a DLNA Transport Packet with a valid non-zero value timestamp */
 static dlna_profile_t mpeg_ts_sd_na_t = {
-DOT_ID "MPEG_TS_SD_NA_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "MPEG_TS_SD_NA_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 /* North America region profile for Standard Definition AV class utilizing
    a DLNA Transport Packet without a Timestamp field */
 static dlna_profile_t mpeg_ts_sd_na_iso = {
-DOT_ID "MPEG_TS_SD_NA_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_SD
+   "MPEG_TS_SD_NA_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_SD
 };
 
 /* North America region profile for Standard Definition AV class utilizing
    a DLNA Transport Packet with zero value timestamp */
 static dlna_profile_t mpeg_ts_sd_na_xac3 = {
-DOT_ID "MPEG_TS_SD_NA_XAC3",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "MPEG_TS_SD_NA_XAC3",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 /* North America region profile for Standard Definition AV class utilizing
    a DLNA Transport Packet with a valid non-zero value timestamp */
 static dlna_profile_t mpeg_ts_sd_na_xac3_t = {
-DOT_ID "MPEG_TS_SD_NA_XAC3_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "MPEG_TS_SD_NA_XAC3_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 /* North America region profile for Standard Definition AV class utilizing
    a DLNA Transport Packet without a Timestamp field */
 static dlna_profile_t mpeg_ts_sd_na_xac3_iso = {
-DOT_ID "MPEG_TS_SD_NA_XAC3_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_SD
+   "MPEG_TS_SD_NA_XAC3_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_SD
 };
 
 /* North America region profile for High Definition AV class utilizing
    a DLNA Transport Packet with zero value timestamp */
 static dlna_profile_t mpeg_ts_hd_na = {
-DOT_ID "MPEG_TS_HD_NA",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_HD
+   "MPEG_TS_HD_NA",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_HD
 };
 
 /* North America region profile for High Definition AV class utilizing
    a DLNA Transport Packet with a valid non-zero value timestamp */
 static dlna_profile_t mpeg_ts_hd_na_t = {
-DOT_ID "MPEG_TS_HD_NA_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_HD
+   "MPEG_TS_HD_NA_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_HD
 };
 
 /* North America region profile for High Definition AV class utilizing
    a DLNA Transport Packet without a Timestamp field */
 static dlna_profile_t mpeg_ts_hd_na_iso = {
-DOT_ID "MPEG_TS_HD_NA_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_HD
+   "MPEG_TS_HD_NA_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_HD
 };
 
 /* North America region profile for transcoded High Definition AV class
    media with a zero value timestamp */
 static dlna_profile_t mpeg_ts_hd_na_xac3 = {
-DOT_ID "MPEG_TS_HD_NA_XAC3",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_HD
+   "MPEG_TS_HD_NA_XAC3",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_HD
 };
 
 /* North America region profile for transcoded High Definition AV class
    media with a valid non-zero value timestamp */
 static dlna_profile_t mpeg_ts_hd_na_xac3_t = {
-DOT_ID "MPEG_TS_HD_NA_XAC3_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_HD
+   "MPEG_TS_HD_NA_XAC3_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_HD
 };
 
 /* North America region profile for transcoded High Definition AV class
    media without a Timestamp field */
 static dlna_profile_t mpeg_ts_hd_na_xac3_iso = {
-DOT_ID "MPEG_TS_HD_NA_XAC3_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_HD
+   "MPEG_TS_HD_NA_XAC3_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_HD
 };
 
 /* Profile defining ES encapsulation for transport of MPEG_PS_PAL over RTP */
 static dlna_profile_t mpeg_es_pal = {
-DOT_ID "MPEG_ES_PAL",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_SD
+   "MPEG_ES_PAL",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_SD
 };
 
 /* Profile defining ES encapsulation for transport of MPEG_PS_NTSC over RTP */
 static dlna_profile_t mpeg_es_ntsc = {
-DOT_ID "MPEG_ES_NTSC",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_SD
+   "MPEG_ES_NTSC",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_SD
 };
 
 /* Profile defining ES encapsulation for transport of
    MPEG_PS_PAL_XAC3 over RTP */
 static dlna_profile_t mpeg_es_pal_xac3 = {
-DOT_ID "MPEG_ES_PAL_XAC3",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_SD
+   "MPEG_ES_PAL_XAC3",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_SD
 };
 
 /* Profile defining ES encapsulation for transport of
    MPEG_PS_NTSC_XAC3 over RTP */
 static dlna_profile_t mpeg_es_ntsc_xac3 = {
-DOT_ID "MPEG_ES_NTSC_XAC3",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_SD
+   "MPEG_ES_NTSC_XAC3",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_SD
 };
 
 static int
@@ -314,13 +315,13 @@ is_mpeg_ps_es_audio_stream_lpcm (AVFormatContext *ctx dlna_unused,
 {
   if (audio_profile_guess_lpcm (codecs->ac) != AUDIO_PROFILE_LPCM)
     return 0;
-  
+
   /* audio bit rate: 1.536 Mbps for stereo, 768 Kbps for mono */
   if (codecs->ac->channels == 2 && codecs->ac->bit_rate > 1536000)
     return 0;
   if (codecs->ac->channels == 1 && codecs->ac->bit_rate > 768000)
     return 0;
-  
+
   return 1;
 }
 
@@ -357,7 +358,7 @@ is_mpeg_ps_es_audio_stream_mp2 (AVFormatContext *ctx dlna_unused,
   if (codecs->ac->channels == 2 &&
       (codecs->ac->bit_rate < 64000 || codecs->ac->bit_rate > 384000))
     return 0;
-  
+
   return 1;
 }
 
@@ -366,6 +367,13 @@ is_mpeg_ts_audio_stream_mp2 (AVFormatContext *ctx dlna_unused,
                              av_codecs_t *codecs)
 {
   return (audio_profile_guess_mp2 (codecs->ac) == AUDIO_PROFILE_MP2) ? 1 : 0;
+}
+
+static int
+is_mpeg_ts_audio_stream_mp1 (AVFormatContext *ctx dlna_unused,
+                             av_codecs_t *codecs)
+{
+  return (audio_profile_guess_mp1 (codecs->ac) == AUDIO_PROFILE_MP1) ? 1 : 0;
 }
 
 static int
@@ -455,9 +463,9 @@ probe_mpeg_ts (AVFormatContext *ctx,
 {
   int xac3 = 0; /* extended AC3 audio */
   int i;
-  
+
   /* check for MPEG-2 MP@LL profile */
-  if (codecs->ac->codec_id == CODEC_ID_AAC)
+  if (codecs->ac->codec_id == AV_CODEC_ID_AAC)
   {
     /* 352x288 only */
     if (codecs->vc->width != 352 && codecs->vc->height != 288)
@@ -502,7 +510,8 @@ probe_mpeg_ts (AVFormatContext *ctx,
           mpeg_ts_valid_streams_eu_sd[i].fps_den == 1)
       {
         if (is_mpeg_ts_audio_stream_ac3 (ctx, codecs) ||
-            is_mpeg_ts_audio_stream_mp2 (ctx, codecs))
+            is_mpeg_ts_audio_stream_mp2 (ctx, codecs) ||
+            is_mpeg_ts_audio_stream_mp1 (ctx, codecs)) // MPEG layer 1, profile 1 is used for some EU streams
         {
           switch (st)
           {
@@ -535,11 +544,17 @@ probe_mpeg_ts (AVFormatContext *ctx,
   /* NA and KO streams can be either SD (Standard Definition)
      or HD (High-Definition) and only support AC3 as audio stream codec */
 
+// Note: Currently FFMPEG incorrectly calculates the total bit rate of some files.
+//		 This change just adds up the video stream and primary audio stream bit rates
+//		 as an estimate
+//  if (ctx->bit_rate > 19392700)
+//    return NULL;
+
   /* maximum system bit rate is 19.3927 Mb/s */
-  if (ctx->bit_rate > 19392700)
+  if (codecs->vc->bit_rate + codecs->ac->bit_rate > 19392700)
     return NULL;
 
-  if (codecs->ac->codec_id != CODEC_ID_AC3)
+  if (codecs->ac->codec_id != AV_CODEC_ID_AC3)
     return NULL;
 
   /* 48 KHz only */
@@ -565,13 +580,13 @@ probe_mpeg_ts (AVFormatContext *ctx,
         mpeg_ts_valid_streams_na_sd[i].fps_num
         == codecs->vs->r_frame_rate.num &&
         mpeg_ts_valid_streams_na_sd[i].fps_den
-        == codecs->vs->r_frame_rate.num)
+        == codecs->vs->r_frame_rate.den)
     {
       switch (st)
       {
       case CT_MPEG_TRANSPORT_STREAM:
         return xac3 ? &mpeg_ts_sd_na_xac3_iso : &mpeg_ts_sd_na_iso;
-      case CT_MPEG_TRANSPORT_STREAM_DLNA:
+      case CT_MPEG_TRANSPORT_STREAM_DLNA: //TODO: Need to check timing to return either mpeg_ts_sd_na_t or mpeg_ts_sd_na for 0 timing
         return xac3 ? &mpeg_ts_sd_na_xac3_t : &mpeg_ts_sd_na_t;
       case CT_MPEG_TRANSPORT_STREAM_DLNA_NO_TS:
         return xac3 ? &mpeg_ts_sd_na_xac3 : &mpeg_ts_sd_na;
@@ -590,13 +605,13 @@ probe_mpeg_ts (AVFormatContext *ctx,
         mpeg_ts_valid_streams_na_hd[i].fps_num
         == codecs->vs->r_frame_rate.num &&
         mpeg_ts_valid_streams_na_hd[i].fps_den
-        == codecs->vs->r_frame_rate.num)
+        == codecs->vs->r_frame_rate.den)
     {
       switch (st)
       {
       case CT_MPEG_TRANSPORT_STREAM:
         return xac3 ? &mpeg_ts_hd_na_xac3_iso : &mpeg_ts_hd_na_iso;
-      case CT_MPEG_TRANSPORT_STREAM_DLNA:
+      case CT_MPEG_TRANSPORT_STREAM_DLNA: //TODO: Need to check timing to return either mpeg_ts_hd_na_t or mpeg_ts_hd_na for 0 timing
         return xac3 ? &mpeg_ts_hd_na_xac3_t : &mpeg_ts_hd_na_t;
       case CT_MPEG_TRANSPORT_STREAM_DLNA_NO_TS:
         return xac3 ? &mpeg_ts_hd_na_xac3 : &mpeg_ts_hd_na;
@@ -617,9 +632,9 @@ probe_mpeg2 (AVFormatContext *ctx,
 {
   if (!stream_ctx_is_av (codecs))
     return NULL;
-  
+
   /* check for MPEG-2 video codec */
-  if (codecs->vc->codec_id != CODEC_ID_MPEG2VIDEO)
+  if (codecs->vc->codec_id != AV_CODEC_ID_MPEG2VIDEO)
     return NULL;
 
   switch (st)
@@ -635,14 +650,14 @@ probe_mpeg2 (AVFormatContext *ctx,
   default:
     break;
   }
-  
+
   return NULL;
 }
 
 dlna_registered_profile_t dlna_profile_av_mpeg2 = {
-DOT_ID DLNA_PROFILE_AV_MPEG2,
-DOT_CLASS DLNA_CLASS_AV,
-DOT_EXTENSIONS "mpg,mpeg,mpe,m2v,mp2p,mp2t,ts,ps,pes",
-DOT_PROBE probe_mpeg2,
-DOT_NEXT NULL
+  DLNA_PROFILE_AV_MPEG2,
+ DLNA_CLASS_AV,
+  "mpg,mpeg,mpe,m2v,mp2p,mp2t,ts,ps,pes",
+   probe_mpeg2,
+  NULL
 };

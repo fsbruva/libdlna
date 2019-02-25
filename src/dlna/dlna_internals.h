@@ -19,29 +19,39 @@
  * Foundation, Inc, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <stdlib.h>
-#include <string.h>
+#ifndef _DLNA_INTERNALS_H_
+#define _DLNA_INTERNALS_H_
 
-#include "dlna_internals.h"
-#include "profiles.h"
+#if defined(__GNUC__)
+#    define dlna_unused __attribute__((unused))
+#else
+#    define dlna_unused
+#endif
 
-audio_profile_t
-audio_profile_guess_g726 (AVCodecContext *ac)
-{
-  if (!ac)
-    return AUDIO_PROFILE_INVALID;
+#ifdef _MSC_VER
+#undef inline
+#define inline __inline
+#endif
 
-  if (ac->codec_id != AV_CODEC_ID_ADPCM_G726)
-    return AUDIO_PROFILE_INVALID;
+#include "dlna.h"
 
-  if (ac->channels != 1)
-    return AUDIO_PROFILE_INVALID;
+/**
+ * DLNA Library's controller.
+ * This controls the whole library.
+ */
+struct dlna_s {
+  /* has the library's been inited */
+  int inited;
+  /* defines verbosity level */
+  int verbosity;
+  /* defines flexibility on file extension's check */
+  int check_extensions;
+  /* linked-list of registered DLNA profiles */
+  void *first_profile;
+};
 
-  if (ac->sample_rate != 8000)
-    return AUDIO_PROFILE_INVALID;
+#ifdef WIN32
+#define strcasecmp stricmp
+#endif
 
-  if (ac->bit_rate != 32000)
-    return AUDIO_PROFILE_INVALID;
-
-  return AUDIO_PROFILE_G726;
-}
+#endif /* _DLNA_INTERNALS_H_ */

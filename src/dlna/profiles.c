@@ -22,12 +22,17 @@
 #include <stdlib.h>
 #include <string.h>
 
+// If we are on MSVC, disable some stupid MSVC warnings
+#ifdef _MSC_VER
+#pragma warning( disable: 4996 )
+#endif
+
 #include "dlna_internals.h"
 #include "profiles.h"
 #include "containers.h"
 
-extern dlna_registered_profile_t dlna_profile_image_jpeg;
-extern dlna_registered_profile_t dlna_profile_image_png;
+//extern dlna_registered_profile_t dlna_profile_image_jpeg;
+//extern dlna_registered_profile_t dlna_profile_image_png;
 extern dlna_registered_profile_t dlna_profile_audio_ac3;
 extern dlna_registered_profile_t dlna_profile_audio_amr;
 extern dlna_registered_profile_t dlna_profile_audio_atrac3;
@@ -51,12 +56,12 @@ dlna_register_profile (dlna_t *dlna, dlna_registered_profile_t *profile)
 
   if (!dlna->inited)
     dlna = dlna_init ();
-  
+
   p = &dlna->first_profile;
   while (*p != NULL)
   {
     if (((dlna_registered_profile_t *) *p)->id == profile->id)
-      return; /* al _ready registered */
+      return; /* already registered */
     p = (void *) &((dlna_registered_profile_t *) *p)->next;
   }
   *p = profile;
@@ -68,12 +73,12 @@ dlna_register_all_media_profiles (dlna_t *dlna)
 {
   if (!dlna)
     return;
-  
+
   if (!dlna->inited)
     dlna = dlna_init ();
-  
-  dlna_register_profile (dlna, &dlna_profile_image_jpeg);
-  dlna_register_profile (dlna, &dlna_profile_image_png);
+
+//  dlna_register_profile (dlna, &dlna_profile_image_jpeg);
+//  dlna_register_profile (dlna, &dlna_profile_image_png);
   dlna_register_profile (dlna, &dlna_profile_audio_ac3);
   dlna_register_profile (dlna, &dlna_profile_audio_amr);
   dlna_register_profile (dlna, &dlna_profile_audio_atrac3);
@@ -93,18 +98,20 @@ dlna_register_media_profile (dlna_t *dlna, dlna_media_profile_t profile)
 {
   if (!dlna)
     return;
-  
+
   if (!dlna->inited)
     dlna = dlna_init ();
-  
+
   switch (profile)
   {
+/*
   case DLNA_PROFILE_IMAGE_JPEG:
     dlna_register_profile (dlna, &dlna_profile_image_jpeg);
     break;
   case DLNA_PROFILE_IMAGE_PNG:
     dlna_register_profile (dlna, &dlna_profile_image_png);
     break;
+*/
   case DLNA_PROFILE_AUDIO_AC3:
     dlna_register_profile (dlna, &dlna_profile_audio_ac3);
     break;
@@ -155,9 +162,8 @@ dlna_init (void)
   dlna->inited = 1;
   dlna->verbosity = 0;
   dlna->first_profile = NULL;
-  
+
   /* register all FFMPEG demuxers */
-  av_register_all ();
 
   return dlna;
 }
@@ -193,25 +199,25 @@ dlna_set_extension_check (dlna_t *dlna, int level)
   dlna->check_extensions = level;
 }
 
-static av_codecs_t *
+av_codecs_t *
 av_profile_get_codecs (AVFormatContext *ctx)
 {
   av_codecs_t *codecs = NULL;
   unsigned int i;
   int audio_stream = -1, video_stream = -1;
- 
+
   codecs = malloc (sizeof (av_codecs_t));
 
   for (i = 0; i < ctx->nb_streams; i++)
   {
     if (audio_stream == -1 &&
-        ctx->streams[i]->codec->codec_type == AVMEDIA_TYPE_AUDIO)
+        ctx->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_AUDIO)
     {
       audio_stream = i;
       continue;
     }
     else if (video_stream == -1 &&
-             ctx->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO)
+             ctx->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO)
     {
       video_stream = i;
       continue;
@@ -219,10 +225,16 @@ av_profile_get_codecs (AVFormatContext *ctx)
   }
 
   codecs->as = audio_stream >= 0 ? ctx->streams[audio_stream] : NULL;
-  codecs->ac = audio_stream >= 0 ? ctx->streams[audio_stream]->codec : NULL;
+  if ((audio_stream < 0) || (avcodec_parameters_to_context(codecs->ac, ctx->streams[audio_stream]->codecpar) < 0)) {
+    codecs->ac = NULL;
+  }
+  codecs->asid = audio_stream;
 
   codecs->vs = video_stream >= 0 ? ctx->streams[video_stream] : NULL;
-  codecs->vc = video_stream >= 0 ? ctx->streams[video_stream]->codec : NULL;
+  if ((video_stream < 0) || (avcodec_parameters_to_context(codecs->vc, ctx->streams[video_stream]->codecpar) < 0)) {
+    codecs->vc = NULL;
+  }
+  codecs->vsid = video_stream;
 
   /* check for at least one video stream and one audio stream in container */
   if (!codecs->ac && !codecs->vc)
@@ -230,11 +242,11 @@ av_profile_get_codecs (AVFormatContext *ctx)
     free (codecs);
     return NULL;
   }
-  
+
   return codecs;
 }
 
-static int
+int
 match_file_extension (const char *filename, const char *extensions)
 {
   const char *ext, *p;
@@ -261,14 +273,14 @@ match_file_extension (const char *filename, const char *extensions)
       p++;
     }
   }
-  
+
   return 0;
 }
 
 dlna_profile_t *
 dlna_guess_media_profile (dlna_t *dlna, const char *filename)
 {
-  AVFormatContext *ctx = NULL;
+  AVFormatContext *ctx;
   dlna_registered_profile_t *p;
   dlna_profile_t *profile = NULL;
   dlna_container_type_t st;
@@ -276,18 +288,18 @@ dlna_guess_media_profile (dlna_t *dlna, const char *filename)
 
   if (!dlna)
     return NULL;
-  
+
   if (!dlna->inited)
     dlna = dlna_init ();
-  
+
   if (avformat_open_input (&ctx, filename, NULL, NULL) != 0)
   {
     if (dlna->verbosity)
-      fprintf (stderr, "can't_open file: %s\n", filename);
+      fprintf (stderr, "can't open file: %s\n", filename);
     return NULL;
   }
 
-  if (av_find_stream_info (ctx) < 0)
+  if (avformat_find_stream_info(ctx, NULL) < 0)
   {
     if (dlna->verbosity)
       fprintf (stderr, "can't find stream info\n");
@@ -295,7 +307,7 @@ dlna_guess_media_profile (dlna_t *dlna, const char *filename)
   }
 
 #ifdef HAVE_DEBUG
-  av_dump_format (ctx, 0, NULL, 0);
+  dump_format (ctx, 0, NULL, 0);
 #endif /* HAVE_DEBUG */
 
   /* grab codecs info */
@@ -305,12 +317,12 @@ dlna_guess_media_profile (dlna_t *dlna, const char *filename)
 
   /* check for container type */
   st = stream_get_container (ctx);
-  
+
   p = dlna->first_profile;
   while (p)
   {
     dlna_profile_t *prof;
-    
+
     if (dlna->check_extensions)
     {
       if (p->extensions)
@@ -323,7 +335,7 @@ dlna_guess_media_profile (dlna_t *dlna, const char *filename)
         }
       }
     }
-    
+
     prof = p->probe (ctx, st, codecs);
     if (prof)
     {
@@ -334,7 +346,7 @@ dlna_guess_media_profile (dlna_t *dlna, const char *filename)
     p = p->next;
   }
 
-  av_close_input_file (ctx);
+  avformat_close_input(&ctx);
   free (codecs);
   return profile;
 }
@@ -434,21 +446,21 @@ dlna_write_protocol_info (dlna_protocol_info_type_t type,
 
   strcat (protocol, p->mime);
   strcat (protocol, ":");
-  
+
   sprintf (dlna_info, "%s=%d;%s=%d;%s=%.2x;%s=%s;%s=%.8x%.24x",
            "DLNA.ORG_PS", speed, "DLNA.ORG_CI", ci,
            "DLNA.ORG_OP", op, "DLNA.ORG_PN", p->id,
            "DLNA.ORG_FLAGS", flags, 0);
   strcat (protocol, dlna_info);
 
-  return _strdup (protocol);
+  return strdup (protocol);
 }
 
 audio_profile_t
 audio_profile_guess (AVCodecContext *ac)
 {
   audio_profile_t ap = AUDIO_PROFILE_INVALID;
-  
+
   if (!ac)
     return ap;
 
@@ -473,6 +485,10 @@ audio_profile_guess (AVCodecContext *ac)
     return ap;
 
   ap = audio_profile_guess_lpcm (ac);
+  if (ap != AUDIO_PROFILE_INVALID)
+    return ap;
+
+  ap = audio_profile_guess_mp1 (ac);
   if (ap != AUDIO_PROFILE_INVALID)
     return ap;
 

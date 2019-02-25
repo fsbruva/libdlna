@@ -19,29 +19,30 @@
  * Foundation, Inc, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <stdlib.h>
-#include <string.h>
+#ifndef _CONTAINERS_H_
+#define _CONTAINERS_H_
 
-#include "dlna_internals.h"
-#include "profiles.h"
+typedef enum {
+  CT_UNKNOWN,
+  CT_IMAGE, /* for PNG and JPEG */
+  CT_ASF, /* usually for WMA/WMV */
+  CT_AMR,
+  CT_AAC,
+  CT_AC3,
+  CT_MP3,
+  CT_WAV,
+  CT_MOV,
+  CT_3GP,
+  CT_MP4,
+  CT_FF_MPEG, /* FFMPEG "mpeg" */
+  CT_FF_MPEG_TS, /* FFMPEG "mpegts" */
+  CT_MPEG_ELEMENTARY_STREAM,
+  CT_MPEG_PROGRAM_STREAM,
+  CT_MPEG_TRANSPORT_STREAM,
+  CT_MPEG_TRANSPORT_STREAM_DLNA,
+  CT_MPEG_TRANSPORT_STREAM_DLNA_NO_TS,
+} dlna_container_type_t;
 
-audio_profile_t
-audio_profile_guess_g726 (AVCodecContext *ac)
-{
-  if (!ac)
-    return AUDIO_PROFILE_INVALID;
+dlna_container_type_t stream_get_container (AVFormatContext *ctx);
 
-  if (ac->codec_id != AV_CODEC_ID_ADPCM_G726)
-    return AUDIO_PROFILE_INVALID;
-
-  if (ac->channels != 1)
-    return AUDIO_PROFILE_INVALID;
-
-  if (ac->sample_rate != 8000)
-    return AUDIO_PROFILE_INVALID;
-
-  if (ac->bit_rate != 32000)
-    return AUDIO_PROFILE_INVALID;
-
-  return AUDIO_PROFILE_G726;
-}
+#endif /* _CONTAINERS_H_ */

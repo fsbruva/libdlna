@@ -31,9 +31,9 @@ audio_profile_guess_mp2 (AVCodecContext *ac)
   if (!ac)
     return AUDIO_PROFILE_INVALID;
 
-  if (ac->codec_id != CODEC_ID_MP2)
+  if (ac->codec_id != AV_CODEC_ID_MP2)
     return AUDIO_PROFILE_INVALID;
-  
+
   if (ac->channels > 5)
     return AUDIO_PROFILE_INVALID;
 
@@ -41,9 +41,9 @@ audio_profile_guess_mp2 (AVCodecContext *ac)
       ac->sample_rate != 44100 &&
       ac->sample_rate != 48000)
     return AUDIO_PROFILE_INVALID;
-  
+
   if (ac->bit_rate < 32000 || ac->bit_rate > 448000)
     return AUDIO_PROFILE_INVALID;
-  
+
   return AUDIO_PROFILE_MP2;
 }

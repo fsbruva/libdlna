@@ -22,20 +22,25 @@
 #include <stdlib.h>
 #include <string.h>
 
+// If we are on MSVC, disable some stupid MSVC warnings
+#ifdef _MSC_VER
+#pragma warning( disable: 4996 )
+#endif
+
 #include "dlna_internals.h"
 #include "profiles.h"
 
 /* Profile for audio media class content */
 static dlna_profile_t lpcm = {
-DOT_ID "LPCM",
-DOT_MIME NULL,
-DOT_LABEL LABEL_AUDIO_2CH
+ "LPCM",
+   NULL,
+  LABEL_AUDIO_2CH
 };
 
 static dlna_profile_t lpcm_low = {
-DOT_ID "LPCM_low",
-DOT_MIME NULL,
-DOT_LABEL LABEL_AUDIO_2CH
+   "LPCM_low",
+   NULL,
+  LABEL_AUDIO_2CH
 };
 
 audio_profile_t
@@ -45,8 +50,8 @@ audio_profile_guess_lpcm (AVCodecContext *ac)
     return AUDIO_PROFILE_INVALID;
 
   /* check for 16-bit signed network-endian PCM codec  */
-  if (ac->codec_id != CODEC_ID_PCM_S16BE &&
-      ac->codec_id != CODEC_ID_PCM_S16LE)
+  if (ac->codec_id != AV_CODEC_ID_PCM_S16BE &&
+      ac->codec_id != AV_CODEC_ID_PCM_S16LE)
     return AUDIO_PROFILE_INVALID;
 
   /* supported channels: mono or stereo */
@@ -56,7 +61,7 @@ audio_profile_guess_lpcm (AVCodecContext *ac)
   /* supported sampling rate: 8 kHz -> 48 kHz */
   if (ac->sample_rate < 8000 || ac->sample_rate > 48000)
     return AUDIO_PROFILE_INVALID;
-  
+
   return AUDIO_PROFILE_LPCM;
 }
 
@@ -80,15 +85,15 @@ probe_lpcm (AVFormatContext *ctx dlna_unused,
     memcpy (&p, &lpcm, sizeof (lpcm));
   sprintf (mime, "%s;rate=%d;channels=%d",
            MIME_AUDIO_LPCM, codecs->ac->sample_rate, codecs->ac->channels);
-  p.mime = _strdup (mime);
-  
+  p.mime = strdup (mime);
+
   return &p;
 }
 
 dlna_registered_profile_t dlna_profile_audio_lpcm = {
-DOT_ID DLNA_PROFILE_AUDIO_LPCM,
-DOT_CLASS DLNA_CLASS_AUDIO,
-DOT_EXTENSIONS "pcm,lpcm,wav,aiff",
-DOT_PROBE probe_lpcm,
-DOT_NEXT NULL
+  DLNA_PROFILE_AUDIO_LPCM,
+  DLNA_CLASS_AUDIO,
+  "pcm,lpcm,wav,aiff",
+  probe_lpcm,
+   NULL
 };

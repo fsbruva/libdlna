@@ -1,20 +1,21 @@
 #include <string.h>
-#ifdef _WIN32
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <unistd.h>
 
+// If we are on MSVC, disable some stupid MSVC warnings
 #ifdef _MSC_VER
-#ifndef inline
-#define inline _inline
-#endif
+#pragma warning( disable: 4996 )
+#pragma warning( disable: 4244 )
+#include "win32config.h"
 #endif
 
 #include <libavformat/avformat.h>
+
+#ifdef _MSC_VER
+#pragma warning( default: 4244 )
+#endif
 
 #include "containers.h"
 #include "profiles.h"
@@ -23,8 +24,6 @@
 #define MPEG_TS_SYNC_CODE 0x47
 #define MPEG_TS_PACKET_LENGTH 188
 #define MPEG_TS_PACKET_LENGTH_DLNA 192 /* prepends 4 bytes to TS packet */
-
-typedef signed long ssize_t;
 
 static const struct {
   const char *name;
@@ -48,12 +47,11 @@ mpeg_find_container_type (const char *filename)
 {
   unsigned char buffer[2*MPEG_TS_PACKET_LENGTH_DLNA+1];
   int fd, i;
-  ssize_t count;
 
-  /*  _read file header */
-  fd =_open (filename, O_RDONLY);
-  count =  _read (fd, buffer, 2 * MPEG_TS_PACKET_LENGTH_DLNA); // Ignoring count
-  _close (fd);
+  /* read file header */
+  fd = open (filename, O_RDONLY);
+  read (fd, buffer, 2 * MPEG_TS_PACKET_LENGTH_DLNA);
+  close (fd);
 
   /* check for MPEG-TS container */
   for (i = 0; i < MPEG_TS_PACKET_LENGTH; i++)
@@ -72,8 +70,8 @@ mpeg_find_container_type (const char *filename)
     {
       if (buffer[i + MPEG_TS_PACKET_LENGTH_DLNA] == MPEG_TS_SYNC_CODE)
       {
-        if (buffer[i] == 0x00 && buffer [i+1] == 0x00 &&
-            buffer [i+2] == 0x00 && buffer [i+3] == 0x00)
+        if (buffer[i + MPEG_TS_PACKET_LENGTH_DLNA - 4] == 0x00 && buffer [i+ MPEG_TS_PACKET_LENGTH_DLNA - 4+1] == 0x00 &&
+            buffer [i+ MPEG_TS_PACKET_LENGTH_DLNA - 4+2] == 0x00 && buffer [i+ MPEG_TS_PACKET_LENGTH_DLNA - 4+3] == 0x00)
           return CT_MPEG_TRANSPORT_STREAM_DLNA_NO_TS; /* empty timestamp */
         else
           return CT_MPEG_TRANSPORT_STREAM_DLNA; /* valid timestamp */
@@ -111,7 +109,7 @@ stream_get_container (AVFormatContext *ctx)
 #ifdef HAVE_DEBUG
   fprintf (stderr, "Found container: %s\n", ctx->iformat->name);
 #endif /* HAVE_DEBUG */
-  
+
   for (i = 0; avf_format_mapping[i].name; i++)
     if (!strcmp (ctx->iformat->name, avf_format_mapping[i].name))
     {
@@ -119,9 +117,9 @@ stream_get_container (AVFormatContext *ctx)
       {
       case CT_FF_MPEG:
       case CT_FF_MPEG_TS:
-        return mpeg_find_container_type (ctx->filename);
+        return mpeg_find_container_type (ctx->url);
       case CT_MOV:
-        return mov_find_container_type (ctx->filename);
+        return mov_find_container_type (ctx->url);
       default:
         return avf_format_mapping[i].type;
       }

@@ -27,17 +27,17 @@
 
 /* Profile for audio media class content */
 static dlna_profile_t mp3 = {
-DOT_ID "MP3",
-DOT_MIME MIME_AUDIO_MPEG,
-DOT_LABEL LABEL_AUDIO_2CH
+  "MP3",
+  MIME_AUDIO_MPEG,
+   LABEL_AUDIO_2CH
 };
 
 /* Profile for audio media class content with extensions
    for lower sampling rates and bitrates */
 static dlna_profile_t mp3x = {
-DOT_ID "MP3X",
-DOT_MIME MIME_AUDIO_MPEG,
-DOT_LABEL LABEL_AUDIO_2CH
+   "MP3X",
+   MIME_AUDIO_MPEG,
+  LABEL_AUDIO_2CH
 };
 
 static int
@@ -47,9 +47,9 @@ audio_is_valid_mp3_common (AVCodecContext *ac)
     return 0;
 
   /* check for MP3 codec */
-  if (ac->codec_id != CODEC_ID_MP3)
+  if (ac->codec_id != AV_CODEC_ID_MP3)
     return 0;
-  
+
   /* only mono and stereo are supported */
   if (ac->channels > 2)
     return 0;
@@ -70,7 +70,7 @@ audio_is_valid_mp3 (AVCodecContext *ac)
       ac->sample_rate != 44100 &&
       ac->sample_rate != 48000)
     return 0;
-  
+
   switch (ac->bit_rate)
   {
   case 32000:
@@ -91,7 +91,7 @@ audio_is_valid_mp3 (AVCodecContext *ac)
   default:
       break;
   }
-  
+
   return 0;
 }
 
@@ -108,7 +108,7 @@ audio_is_valid_mp3x (AVCodecContext *ac)
       ac->sample_rate != 22050 &&
       ac->sample_rate != 24000)
     return 0;
-  
+
   switch (ac->bit_rate)
   {
     case 8000:
@@ -132,7 +132,7 @@ audio_is_valid_mp3x (AVCodecContext *ac)
   default:
       break;
   }
-  
+
   return 0;
 }
 
@@ -140,7 +140,7 @@ audio_profile_t
 audio_profile_guess_mp3 (AVCodecContext *ac)
 {
   audio_profile_t ap = AUDIO_PROFILE_INVALID;
-  
+
   if (!ac)
     return ap;
 
@@ -149,7 +149,7 @@ audio_profile_guess_mp3 (AVCodecContext *ac)
 
   if (audio_is_valid_mp3 (ac))
     return AUDIO_PROFILE_MP3;
-  
+
   return AUDIO_PROFILE_INVALID;
 }
 
@@ -165,7 +165,7 @@ probe_mp3 (AVFormatContext *ctx dlna_unused,
   /* check for supported container */
   if (st != CT_MP3)
     return NULL;
-  
+
   switch (audio_profile_guess_mp3 (codecs->ac))
   {
   case AUDIO_PROFILE_MP3:
@@ -175,14 +175,14 @@ probe_mp3 (AVFormatContext *ctx dlna_unused,
   default:
     break;
   }
-  
+
   return NULL;
 }
 
 dlna_registered_profile_t dlna_profile_audio_mp3 = {
-DOT_ID DLNA_PROFILE_AUDIO_MP3,
-DOT_CLASS DLNA_CLASS_AUDIO,
-DOT_EXTENSIONS "mp3",
-DOT_PROBE probe_mp3,
-DOT_NEXT NULL
+  DLNA_PROFILE_AUDIO_MP3,
+   DLNA_CLASS_AUDIO,
+  "mp3",
+   probe_mp3,
+  NULL
 };

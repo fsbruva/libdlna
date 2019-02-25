@@ -28,23 +28,23 @@
 
 /* Profile for audio media class content */
 static dlna_profile_t amr = {
-DOT_ID "AMR_3GPP",
-DOT_MIME MIME_AUDIO_MPEG_4,
-DOT_LABEL LABEL_AUDIO_MONO
+   "AMR_3GPP",
+   MIME_AUDIO_MPEG_4,
+   LABEL_AUDIO_MONO
 };
 
 /* Profile for audio media class content */
 static dlna_profile_t three_gpp = {
-DOT_ID "AMR_3GPP",
-DOT_MIME MIME_AUDIO_3GP,
-DOT_LABEL LABEL_AUDIO_MONO
+   "AMR_3GPP",
+   MIME_AUDIO_3GP,
+   LABEL_AUDIO_MONO
 };
 
 /* Profile for audio media class content */
 static dlna_profile_t amr_wbplus = {
-DOT_ID "AMR_WBplus",
-DOT_MIME MIME_AUDIO_3GP,
-DOT_LABEL LABEL_AUDIO_2CH
+   "AMR_WBplus",
+   MIME_AUDIO_3GP,
+  LABEL_AUDIO_2CH
 };
 
 static int
@@ -53,9 +53,9 @@ audio_is_valid_amr (AVCodecContext *ac)
   if (!ac)
     return 0;
 
-  if (ac->codec_id != CODEC_ID_AMR_NB)
+  if (ac->codec_id != AV_CODEC_ID_AMR_NB)
     return 0;
-  
+
   /* only mono is supported */
   if (ac->channels != 1)
     return 0;
@@ -89,9 +89,9 @@ audio_is_valid_amr_wb (AVCodecContext *ac)
   if (!ac)
     return 0;
 
-  if (ac->codec_id != CODEC_ID_AMR_WB)
+  if (ac->codec_id != AV_CODEC_ID_AMR_WB)
     return 0;
-  
+
   /* valid sampling rates: 8, 16, 24, 32 and 48 kHz */
   if (ac->sample_rate != 8000 &&
       ac->sample_rate != 16000 &&
@@ -121,7 +121,7 @@ audio_profile_guess_amr (AVCodecContext *ac)
     return AUDIO_PROFILE_AMR;
   else if (audio_is_valid_amr_wb (ac))
     return AUDIO_PROFILE_AMR_WB;
-  
+
   return AUDIO_PROFILE_INVALID;
 }
 
@@ -136,21 +136,21 @@ probe_amr (AVFormatContext *ctx dlna_unused,
   /* check for supported container */
   if (st != CT_AMR && st != CT_3GP && st != CT_MP4)
     return NULL;
-  
+
   /* check for AMR NB/WB audio codec */
   if (audio_is_valid_amr (codecs->ac))
     return (st == CT_3GP) ? &three_gpp : &amr;
 
   if (audio_is_valid_amr_wb (codecs->ac))
     return &amr_wbplus;
-  
+
   return NULL;
 }
 
 dlna_registered_profile_t dlna_profile_audio_amr = {
-DOT_ID DLNA_PROFILE_AUDIO_AMR,
-DOT_CLASS DLNA_CLASS_AUDIO,
-DOT_EXTENSIONS "amr,3gp,mp4",
-DOT_PROBE probe_amr,
-DOT_NEXT NULL
+   DLNA_PROFILE_AUDIO_AMR,
+  DLNA_CLASS_AUDIO,
+  "amr,3gp,mp4",
+  probe_amr,
+ NULL
 };

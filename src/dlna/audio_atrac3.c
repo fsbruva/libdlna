@@ -27,9 +27,9 @@
 
 /* Profile for audio media class content */
 static dlna_profile_t atrac3 = {
-DOT_ID "ATRAC3plus",
-DOT_MIME MIME_AUDIO_ATRAC,
-DOT_LABEL LABEL_AUDIO_2CH_MULTI
+  "ATRAC3plus",
+   MIME_AUDIO_ATRAC,
+   LABEL_AUDIO_2CH_MULTI
 };
 
 audio_profile_t
@@ -39,7 +39,7 @@ audio_profile_guess_atrac (AVCodecContext *ac)
     return AUDIO_PROFILE_INVALID;
 
 #if LIBAVCODEC_VERSION_INT >= ((51<<16)+(40<<8)+4)
-  if (ac->codec_id == CODEC_ID_ATRAC3)
+  if (ac->codec_id == AV_CODEC_ID_ATRAC3)
     return AUDIO_PROFILE_ATRAC;
 #endif
 
@@ -53,7 +53,7 @@ probe_atrac3 (AVFormatContext *ctx dlna_unused,
 {
   if (!stream_ctx_is_audio (codecs))
     return NULL;
-  
+
   if (audio_profile_guess_atrac (codecs->ac) == AUDIO_PROFILE_ATRAC)
     return &atrac3;
 
@@ -61,9 +61,9 @@ probe_atrac3 (AVFormatContext *ctx dlna_unused,
 }
 
 dlna_registered_profile_t dlna_profile_audio_atrac3 = {
-DOT_ID DLNA_PROFILE_AUDIO_ATRAC3,
-DOT_CLASS DLNA_CLASS_AUDIO,
-DOT_EXTENSIONS "at3p,acm,wav",
-DOT_PROBE probe_atrac3,
-DOT_NEXT NULL
+  DLNA_PROFILE_AUDIO_ATRAC3,
+  DLNA_CLASS_AUDIO,
+  "at3p,acm,wav",
+ probe_atrac3,
+  NULL
 };

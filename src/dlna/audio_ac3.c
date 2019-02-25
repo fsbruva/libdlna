@@ -27,9 +27,9 @@
 
 /* Profile for audio media class content */
 static dlna_profile_t ac3 = {
-DOT_ID "AC3",
-DOT_MIME MIME_AUDIO_DOLBY_DIGITAL,
-DOT_LABEL LABEL_AUDIO_2CH_MULTI
+   "AC3",
+   MIME_AUDIO_DOLBY_DIGITAL,
+   LABEL_AUDIO_2CH_MULTI
 };
 
 audio_profile_t
@@ -39,9 +39,9 @@ audio_profile_guess_ac3 (AVCodecContext *ac)
     return AUDIO_PROFILE_INVALID;
 
   /* check for AC3 codec */
-  if (ac->codec_id != CODEC_ID_AC3)
+  if (ac->codec_id != AV_CODEC_ID_AC3)
     return AUDIO_PROFILE_INVALID;
-  
+
   /* supported channels: 1/0, 2/0, 3/0, 2/1, 3/1, 2/2, 3/2 */
   if (ac->channels > 5)
     return AUDIO_PROFILE_INVALID;
@@ -76,7 +76,7 @@ probe_ac3 (AVFormatContext *ctx dlna_unused,
   /* check for supported container */
   if (st != CT_AC3)
     return NULL;
-  
+
   switch (audio_profile_guess_ac3 (codecs->ac))
   {
   case AUDIO_PROFILE_AC3:
@@ -85,14 +85,14 @@ probe_ac3 (AVFormatContext *ctx dlna_unused,
   default:
     break;
   }
-  
+
   return NULL;
 }
 
 dlna_registered_profile_t dlna_profile_audio_ac3 = {
-DOT_ID DLNA_PROFILE_AUDIO_AC3,
-DOT_CLASS DLNA_CLASS_AUDIO,
-DOT_EXTENSIONS "ac3",
-DOT_PROBE probe_ac3,
-DOT_NEXT NULL
+  DLNA_PROFILE_AUDIO_AC3,
+  DLNA_CLASS_AUDIO,
+  "ac3",
+  probe_ac3,
+  NULL
 };

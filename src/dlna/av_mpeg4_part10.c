@@ -21,22 +21,21 @@
 
 #include <stdlib.h>
 #include <string.h>
-#ifdef _WIN32
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 
 #ifdef _MSC_VER
-#ifndef inline
-#define inline _inline
-#endif
+#pragma warning( disable: 4244 )
+#include "win32config.h"
 #endif
 
 #include <libavcodec/avcodec.h>
+
+#ifdef _MSC_VER
+#pragma warning( default: 4244 )
+#endif
+
 
 #include "dlna_internals.h"
 #include "profiles.h"
@@ -128,183 +127,183 @@ static video_properties_t profile_mp_hd_res[] = {
 /********************/
 
 static dlna_profile_t avc_mp4_mp_sd_aac_mult5 = {
-DOT_ID "AVC_MP4_MP_SD_AAC_MULT5",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_MP4_MP_SD_AAC_MULT5",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_mp4_mp_sd_heaac_l2 = {
-DOT_ID "AVC_MP4_MP_SD_HEAAC_L2",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_MP4_MP_SD_HEAAC_L2",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_mp4_mp_sd_mpeg1_l3 = {
-DOT_ID "AVC_MP4_MP_SD_MPEG1_L3",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_MP4_MP_SD_MPEG1_L3",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_mp4_mp_sd_ac3 = {
-DOT_ID "AVC_MP4_MP_SD_AC3",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_MP4_MP_SD_AC3",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_mp4_mp_sd_aac_ltp = {
-DOT_ID "AVC_MP4_MP_SD_AAC_LTP",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_MP4_MP_SD_AAC_LTP",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_mp4_mp_sd_aac_ltp_mult5 = {
-DOT_ID "AVC_MP4_MP_SD_AAC_LTP_MULT5",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_MP4_MP_SD_AAC_LTP_MULT5",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_mp4_mp_sd_aac_ltp_mult7 = {
-DOT_ID "AVC_MP4_MP_SD_AAC_LTP_MULT7",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_MP4_MP_SD_AAC_LTP_MULT7",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_mp4_mp_sd_atrac3plus = {
-DOT_ID "AVC_MP4_MP_SD_ATRAC3plus",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_MP4_MP_SD_ATRAC3plus",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_mp4_bl_l3l_sd_aac = {
-DOT_ID "AVC_MP4_BL_L3L_SD_AAC",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_MP4_BL_L3L_SD_AAC",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_mp4_bl_l3l_sd_heaac = {
-DOT_ID "AVC_MP4_BL_L3L_SD_HEAAC",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_MP4_BL_L3L_SD_HEAAC",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_mp4_bl_l3_sd_aac = {
-DOT_ID "AVC_MP4_BL_L3_SD_AAC",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_MP4_BL_L3_SD_AAC",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_mp4_mp_sd_bsac = {
-DOT_ID "AVC_MP4_MP_SD_BSAC",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_MP4_MP_SD_BSAC",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_mp4_bl_cif30_aac_mult5 = {
-DOT_ID "AVC_MP4_BL_CIF30_AAC_MULT5",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_MP4_BL_CIF30_AAC_MULT5",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_mp4_bl_cif30_heaac_l2 = {
-DOT_ID "AVC_MP4_BL_CIF30_HEAAC_L2",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_MP4_BL_CIF30_HEAAC_L2",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_mp4_bl_cif30_mpeg1_l3 = {
-DOT_ID "AVC_MP4_BL_CIF30_MPEG1_L3",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_MP4_BL_CIF30_MPEG1_L3",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_mp4_bl_cif30_ac3 = {
-DOT_ID "AVC_MP4_BL_CIF30_AC3",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_MP4_BL_CIF30_AC3",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_mp4_bl_cif30_aac_ltp = {
-DOT_ID "AVC_MP4_BL_CIF30_AAC_LTP",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_MP4_BL_CIF30_AAC_LTP",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_mp4_bl_cif30_aac_ltp_mult5 = {
-DOT_ID "AVC_MP4_BL_CIF30_AAC_LTP_MULT5",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_MP4_BL_CIF30_AAC_LTP_MULT5",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_mp4_bl_l2_cif30_aac = {
-DOT_ID "AVC_MP4_BL_L2_CIF30_AAC",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_MP4_BL_L2_CIF30_AAC",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_mp4_bl_cif30_bsac = {
-DOT_ID "AVC_MP4_BL_CIF30_BSAC",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_MP4_BL_CIF30_BSAC",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_mp4_bl_cif30_bsac_mult5 = {
-DOT_ID "AVC_MP4_BL_CIF30_BSAC_MULT5",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_MP4_BL_CIF30_BSAC_MULT5",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_mp4_bl_cif15_heaac = {
-DOT_ID "AVC_MP4_BL_CIF15_HEAAC",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_MP4_BL_CIF15_HEAAC",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_CIF15
 };
 
 static dlna_profile_t avc_mp4_bl_cif15_amr = {
-DOT_ID "AVC_MP4_BL_CIF15_AMR",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_MP4_BL_CIF15_AMR",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_CIF15
 };
 
 static dlna_profile_t avc_mp4_bl_cif15_aac = {
-DOT_ID "AVC_MP4_BL_CIF15_AAC",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_MP4_BL_CIF15_AAC",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_CIF15
 };
 
 static dlna_profile_t avc_mp4_bl_cif15_aac_520 = {
-DOT_ID "AVC_MP4_BL_CIF15_AAC_520",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_MP4_BL_CIF15_AAC_520",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_CIF15
 };
 
 static dlna_profile_t avc_mp4_bl_cif15_aac_ltp = {
-DOT_ID "AVC_MP4_BL_CIF15_AAC_LTP",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_MP4_BL_CIF15_AAC_LTP",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_CIF15
 };
 
 static dlna_profile_t avc_mp4_bl_cif15_aac_ltp_520 = {
-DOT_ID "AVC_MP4_BL_CIF15_AAC_LTP_520",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_MP4_BL_CIF15_AAC_LTP_520",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_CIF15
 };
 
 static dlna_profile_t avc_mp4_bl_cif15_bsac = {
-DOT_ID "AVC_MP4_BL_CIF15_BSAC",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_MP4_BL_CIF15_BSAC",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_CIF15
 };
 
 static dlna_profile_t avc_mp4_bl_l12_cif15_heaac = {
-DOT_ID "AVC_MP4_BL_L12_CIF15_HEAAC",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_MP4_BL_L12_CIF15_HEAAC",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_CIF15
 };
 
 static dlna_profile_t avc_mp4_bl_l1b_qcif15_heaac = {
-DOT_ID "AVC_MP4_BL_L1B_QCIF15_HEAAC",
-DOT_MIME MIME_VIDEO_MPEG_4,
-DOT_LABEL LABEL_VIDEO_QCIF15
+   "AVC_MP4_BL_L1B_QCIF15_HEAAC",
+   MIME_VIDEO_MPEG_4,
+   LABEL_VIDEO_QCIF15
 };
 
 /*********************/
@@ -312,489 +311,489 @@ DOT_LABEL LABEL_VIDEO_QCIF15
 /*********************/
 
 static dlna_profile_t avc_ts_mp_sd_aac_mult5 = {
-DOT_ID "AVC_TS_MP_SD_AAC_MULT5",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_AAC_MULT5",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_aac_mult5_t = {
-DOT_ID "AVC_TS_MP_SD_AAC_MULT5_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_AAC_MULT5_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_aac_mult5_iso = {
-DOT_ID "AVC_TS_MP_SD_AAC_MULT5_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_AAC_MULT5_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_heaac_l2 = {
-DOT_ID "AVC_TS_MP_SD_HEAAC_L2",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_HEAAC_L2",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_heaac_l2_t = {
-DOT_ID "AVC_TS_MP_SD_HEAAC_L2_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_HEAAC_L2_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_heaac_l2_iso = {
-DOT_ID "AVC_TS_MP_SD_HEAAC_L2_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_HEAAC_L2_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_mpeg1_l3 = {
-DOT_ID "AVC_TS_MP_SD_MPEG1_L3",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_MPEG1_L3",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_mpeg1_l3_t = {
-DOT_ID "AVC_TS_MP_SD_MPEG1_L3_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_MPEG1_L3_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_mpeg1_l3_iso = {
-DOT_ID "AVC_TS_MP_SD_MPEG1_L3_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_MPEG1_L3_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_ac3 = {
-DOT_ID "AVC_TS_MP_SD_AC3",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_AC3",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_ac3_t = {
-DOT_ID "AVC_TS_MP_SD_AC3_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_AC3_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_ac3_iso = {
-DOT_ID "AVC_TS_MP_SD_AC3_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_AC3_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_aac_ltp = {
-DOT_ID "AVC_TS_MP_SD_AAC_LTP",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_AAC_LTP",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_aac_ltp_t = {
-DOT_ID "AVC_TS_MP_SD_AAC_LTP_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_AAC_LTP_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_aac_ltp_iso = {
-DOT_ID "AVC_TS_MP_SD_AAC_LTP_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_AAC_LTP_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_aac_ltp_mult5 = {
-DOT_ID "AVC_TS_MP_SD_AAC_LTP_MULT5",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_AAC_LTP_MULT5",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_aac_ltp_mult5_t = {
-DOT_ID "AVC_TS_MP_SD_AAC_LTP_MULT5_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_AAC_LTP_MULT5_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_aac_ltp_mult5_iso = {
-DOT_ID "AVC_TS_MP_SD_AAC_LTP_MULT5_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_AAC_LTP_MULT5_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_aac_ltp_mult7 = {
-DOT_ID "AVC_TS_MP_SD_AAC_LTP_MULT7",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_AAC_LTP_MULT7",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_aac_ltp_mult7_t = {
-DOT_ID "AVC_TS_MP_SD_AAC_LTP_MULT7_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_AAC_LTP_MULT7_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_aac_ltp_mult7_iso = {
-DOT_ID "AVC_TS_MP_SD_AAC_LTP_MULT7_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_AAC_LTP_MULT7_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_bsac = {
-DOT_ID "AVC_TS_MP_SD_BSAC",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_BSAC",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_bsac_t = {
-DOT_ID "AVC_TS_MP_SD_BSAC_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_BSAC_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_mp_sd_bsac_iso = {
-DOT_ID "AVC_TS_MP_SD_BSAC_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_SD
+   "AVC_TS_MP_SD_BSAC_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_SD
 };
 
 static dlna_profile_t avc_ts_bl_cif30_aac_mult5 = {
-DOT_ID "AVC_TS_BL_CIF30_AAC_MULT5",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_AAC_MULT5",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_bl_cif30_aac_mult5_t = {
-DOT_ID "AVC_TS_BL_CIF30_AAC_MULT5_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_AAC_MULT5_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_bl_cif30_aac_mult5_iso = {
-DOT_ID "AVC_TS_BL_CIF30_AAC_MULT5_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_AAC_MULT5_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_bl_cif30_heaac_l2 = {
-DOT_ID "AVC_TS_BL_CIF30_HEAAC_L2",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_HEAAC_L2",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_bl_cif30_heaac_l2_t = {
-DOT_ID "AVC_TS_BL_CIF30_HEAAC_L2_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_HEAAC_L2_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_bl_cif30_heaac_l2_iso = {
-DOT_ID "AVC_TS_BL_CIF30_HEAAC_L2_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_HEAAC_L2_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_bl_cif30_mpeg1_l3 = {
-DOT_ID "AVC_TS_BL_CIF30_MPEG1_L3",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_MPEG1_L3",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_bl_cif30_mpeg1_l3_t = {
-DOT_ID "AVC_TS_BL_CIF30_MPEG1_L3_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_MPEG1_L3_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_bl_cif30_mpeg1_l3_iso = {
-DOT_ID "AVC_TS_BL_CIF30_MPEG1_L3_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_MPEG1_L3_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_bl_cif30_ac3 = {
-DOT_ID "AVC_TS_BL_CIF30_AC3",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_AC3",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_bl_cif30_ac3_t = {
-DOT_ID "AVC_TS_BL_CIF30_AC3_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_AC3_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_bl_cif30_ac3_iso = {
-DOT_ID "AVC_TS_BL_CIF30_AC3_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_AC3_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_bl_cif30_aac_ltp = {
-DOT_ID "AVC_TS_BL_CIF30_AAC_LTP",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_AAC_LTP",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_bl_cif30_aac_ltp_t = {
-DOT_ID "AVC_TS_BL_CIF30_AAC_LTP_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_AAC_LTP_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_bl_cif30_aac_ltp_iso = {
-DOT_ID "AVC_TS_BL_CIF30_AAC_LTP_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_AAC_LTP_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_bl_cif30_aac_ltp_mult5 = {
-DOT_ID "AVC_TS_BL_CIF30_AAC_LTP_MULT5",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_AAC_LTP_MULT5",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_bl_cif30_aac_ltp_mult5_t = {
-DOT_ID "AVC_TS_BL_CIF30_AAC_LTP_MULT5_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_AAC_LTP_MULT5_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_bl_cif30_aac_ltp_mult5_iso = {
-DOT_ID "AVC_TS_BL_CIF30_AAC_LTP_MULT5_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_AAC_LTP_MULT5_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_bl_cif30_aac_940 = {
-DOT_ID "AVC_TS_BL_CIF30_AAC_940",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_AAC_940",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_bl_cif30_aac_940_t = {
-DOT_ID "AVC_TS_BL_CIF30_AAC_940_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_AAC_940_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_bl_cif30_aac_940_iso = {
-DOT_ID "AVC_TS_BL_CIF30_AAC_940_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_TS_BL_CIF30_AAC_940_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_ts_mp_hd_aac_mult5 = {
-DOT_ID "AVC_TS_MP_HD_AAC_MULT5",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_AAC_MULT5",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_aac_mult5_t = {
-DOT_ID "AVC_TS_MP_HD_AAC_MULT5_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_AAC_MULT5_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_aac_mult5_iso = {
-DOT_ID "AVC_TS_MP_HD_AAC_MULT5_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_AAC_MULT5_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_heaac_l2 = {
-DOT_ID "AVC_TS_MP_HD_HEAAC_L2",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_HEAAC_L2",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_heaac_l2_t = {
-DOT_ID "AVC_TS_MP_HD_HEAAC_L2_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_HEAAC_L2_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_heaac_l2_iso = {
-DOT_ID "AVC_TS_MP_HD_HEAAC_L2_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_HEAAC_L2_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_mpeg1_l3 = {
-DOT_ID "AVC_TS_MP_HD_MPEG1_L3",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_MPEG1_L3",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_mpeg1_l3_t = {
-DOT_ID "AVC_TS_MP_HD_MPEG1_L3_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_MPEG1_L3_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_mpeg1_l3_iso = {
-DOT_ID "AVC_TS_MP_HD_MPEG1_L3_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_MPEG1_L3_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_ac3 = {
-DOT_ID "AVC_TS_MP_HD_AC3",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_AC3",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_ac3_t = {
-DOT_ID "AVC_TS_MP_HD_AC3_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_AC3_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_ac3_iso = {
-DOT_ID "AVC_TS_MP_HD_AC3_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_AC3_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_aac = {
-DOT_ID "AVC_TS_MP_HD_AAC",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_AAC",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_aac_t = {
-DOT_ID "AVC_TS_MP_HD_AAC_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_AAC_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_aac_iso = {
-DOT_ID "AVC_TS_MP_HD_AAC_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_AAC_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_aac_ltp = {
-DOT_ID "AVC_TS_MP_HD_AAC_LTP",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_AAC_LTP",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_aac_ltp_t = {
-DOT_ID "AVC_TS_MP_HD_AAC_LTP_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_AAC_LTP_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_aac_ltp_iso = {
-DOT_ID "AVC_TS_MP_HD_AAC_LTP_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_AAC_LTP_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_aac_ltp_mult5 = {
-DOT_ID "AVC_TS_MP_HD_AAC_LTP_MULT5",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_AAC_LTP_MULT5",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_aac_ltp_mult5_t = {
-DOT_ID "AVC_TS_MP_HD_AAC_LTP_MULT5_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_AAC_LTP_MULT5_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_aac_ltp_mult5_iso = {
-DOT_ID "AVC_TS_MP_HD_AAC_LTP_MULT5_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_AAC_LTP_MULT5_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_aac_ltp_mult7 = {
-DOT_ID "AVC_TS_MP_HD_AAC_LTP_MULT7",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_AAC_LTP_MULT7",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_aac_ltp_mult7_t = {
-DOT_ID "AVC_TS_MP_HD_AAC_LTP_MULT7_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_AAC_LTP_MULT7_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_mp_hd_aac_ltp_mult7_iso = {
-DOT_ID "AVC_TS_MP_HD_AAC_LTP_MULT7_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_HD
+   "AVC_TS_MP_HD_AAC_LTP_MULT7_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_HD
 };
 
 static dlna_profile_t avc_ts_bl_cif15_aac = {
-DOT_ID "AVC_TS_BL_CIF15_AAC",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_TS_BL_CIF15_AAC",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF15
 };
 
 static dlna_profile_t avc_ts_bl_cif15_aac_t = {
-DOT_ID "AVC_TS_BL_CIF15_AAC_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_TS_BL_CIF15_AAC_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF15
 };
 
 static dlna_profile_t avc_ts_bl_cif15_aac_iso = {
-DOT_ID "AVC_TS_BL_CIF15_AAC_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_TS_BL_CIF15_AAC_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_CIF15
 };
 
 static dlna_profile_t avc_ts_bl_cif15_aac_540 = {
-DOT_ID "AVC_TS_BL_CIF15_AAC_540",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_TS_BL_CIF15_AAC_540",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF15
 };
 
 static dlna_profile_t avc_ts_bl_cif15_aac_540_t = {
-DOT_ID "AVC_TS_BL_CIF15_AAC_540_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_TS_BL_CIF15_AAC_540_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF15
 };
 
 static dlna_profile_t avc_ts_bl_cif15_aac_540_iso = {
-DOT_ID "AVC_TS_BL_CIF15_AAC_540_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_TS_BL_CIF15_AAC_540_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_CIF15
 };
 
 static dlna_profile_t avc_ts_bl_cif15_aac_ltp = {
-DOT_ID "AVC_TS_BL_CIF15_AAC_LTP",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_TS_BL_CIF15_AAC_LTP",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF15
 };
 
 static dlna_profile_t avc_ts_bl_cif15_aac_ltp_t = {
-DOT_ID "AVC_TS_BL_CIF15_AAC_LTP_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_TS_BL_CIF15_AAC_LTP_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF15
 };
 
 static dlna_profile_t avc_ts_bl_cif15_aac_ltp_iso = {
-DOT_ID "AVC_TS_BL_CIF15_AAC_LTP_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_TS_BL_CIF15_AAC_LTP_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_CIF15
 };
 
 static dlna_profile_t avc_ts_bl_cif15_bsac = {
-DOT_ID "AVC_TS_BL_CIF15_BSAC",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_TS_BL_CIF15_BSAC",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF15
 };
 
 static dlna_profile_t avc_ts_bl_cif15_bsac_t = {
-DOT_ID "AVC_TS_BL_CIF15_BSAC_T",
-DOT_MIME MIME_VIDEO_MPEG_TS,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_TS_BL_CIF15_BSAC_T",
+   MIME_VIDEO_MPEG_TS,
+   LABEL_VIDEO_CIF15
 };
 
 static dlna_profile_t avc_ts_bl_cif15_bsac_iso = {
-DOT_ID "AVC_TS_BL_CIF15_BSAC_ISO",
-DOT_MIME MIME_VIDEO_MPEG,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_TS_BL_CIF15_BSAC_ISO",
+   MIME_VIDEO_MPEG,
+   LABEL_VIDEO_CIF15
 };
 
 /******************/
@@ -802,45 +801,45 @@ DOT_LABEL LABEL_VIDEO_CIF15
 /******************/
 
 static dlna_profile_t avc_3gpp_bl_cif30_amr_wbplus = {
-DOT_ID "AVC_3GPP_BL_CIF30_AMR_WBplus",
-DOT_MIME MIME_VIDEO_3GP,
-DOT_LABEL LABEL_VIDEO_CIF30
+   "AVC_3GPP_BL_CIF30_AMR_WBplus",
+   MIME_VIDEO_3GP,
+   LABEL_VIDEO_CIF30
 };
 
 static dlna_profile_t avc_3gpp_bl_cif15_amr_wbplus = {
-DOT_ID "AVC_3GPP_BL_CIF15_AMR_WBplus",
-DOT_MIME MIME_VIDEO_3GP,
-DOT_LABEL LABEL_VIDEO_CIF15
+   "AVC_3GPP_BL_CIF15_AMR_WBplus",
+   MIME_VIDEO_3GP,
+   LABEL_VIDEO_CIF15
 };
 
 static dlna_profile_t avc_3gpp_bl_qcif15_aac = {
-DOT_ID "AVC_3GPP_BL_QCIF15_AAC",
-DOT_MIME MIME_VIDEO_3GP,
-DOT_LABEL LABEL_VIDEO_QCIF15
+   "AVC_3GPP_BL_QCIF15_AAC",
+   MIME_VIDEO_3GP,
+   LABEL_VIDEO_QCIF15
 };
 
 static dlna_profile_t avc_3gpp_bl_qcif15_aac_ltp = {
-DOT_ID "AVC_3GPP_BL_QCIF15_AAC_LTP",
-DOT_MIME MIME_VIDEO_3GP,
-DOT_LABEL LABEL_VIDEO_QCIF15
+   "AVC_3GPP_BL_QCIF15_AAC_LTP",
+   MIME_VIDEO_3GP,
+   LABEL_VIDEO_QCIF15
 };
 
 static dlna_profile_t avc_3gpp_bl_qcif15_heaac = {
-DOT_ID "AVC_3GPP_BL_QCIF15_HEAAC",
-DOT_MIME MIME_VIDEO_3GP,
-DOT_LABEL LABEL_VIDEO_QCIF15
+   "AVC_3GPP_BL_QCIF15_HEAAC",
+   MIME_VIDEO_3GP,
+   LABEL_VIDEO_QCIF15
 };
 
 static dlna_profile_t avc_3gpp_bl_qcif15_amr_wbplus = {
-DOT_ID "AVC_3GPP_BL_QCIF15_AMR_WBplus",
-DOT_MIME MIME_VIDEO_3GP,
-DOT_LABEL LABEL_VIDEO_QCIF15
+   "AVC_3GPP_BL_QCIF15_AMR_WBplus",
+   MIME_VIDEO_3GP,
+   LABEL_VIDEO_QCIF15
 };
 
 static dlna_profile_t avc_3gpp_bl_qcif15_amr = {
-DOT_ID "AVC_3GPP_BL_QCIF15_AMR",
-DOT_MIME MIME_VIDEO_3GP,
-DOT_LABEL LABEL_VIDEO_QCIF15
+   "AVC_3GPP_BL_QCIF15_AMR",
+   MIME_VIDEO_3GP,
+   LABEL_VIDEO_QCIF15
 };
 
 static const struct {
@@ -868,7 +867,7 @@ static const struct {
     AVC_VIDEO_PROFILE_MP_SD, AUDIO_PROFILE_ATRAC },
   { &avc_mp4_mp_sd_bsac, CT_MP4,
     AVC_VIDEO_PROFILE_MP_SD, AUDIO_PROFILE_AAC_BSAC },
-  
+
   { &avc_mp4_bl_l3l_sd_aac, CT_MP4,
     AVC_VIDEO_PROFILE_BL_L3L_SD, AUDIO_PROFILE_AAC },
   { &avc_mp4_bl_l3l_sd_heaac, CT_MP4,
@@ -893,10 +892,10 @@ static const struct {
     AVC_VIDEO_PROFILE_BL_CIF30, AUDIO_PROFILE_AAC_BSAC },
   { &avc_mp4_bl_cif30_bsac_mult5, CT_MP4,
     AVC_VIDEO_PROFILE_BL_CIF30, AUDIO_PROFILE_AAC_BSAC_MULT5 },
-  
+
   { &avc_mp4_bl_l2_cif30_aac, CT_MP4,
     AVC_VIDEO_PROFILE_BL_L2_CIF30, AUDIO_PROFILE_AAC },
-  
+
   { &avc_mp4_bl_cif15_heaac, CT_MP4,
     AVC_VIDEO_PROFILE_BL_CIF15, AUDIO_PROFILE_AAC_HE_L2 },
   { &avc_mp4_bl_cif15_amr, CT_MP4,
@@ -1107,7 +1106,7 @@ static const struct {
     AVC_VIDEO_PROFILE_BL_CIF15, AUDIO_PROFILE_AAC_BSAC },
   { &avc_ts_bl_cif15_bsac_iso, CT_MPEG_TRANSPORT_STREAM,
     AVC_VIDEO_PROFILE_BL_CIF15, AUDIO_PROFILE_AAC_BSAC },
-  
+
   /* 3GPP Container */
   { &avc_3gpp_bl_cif30_amr_wbplus, CT_3GP,
     AVC_VIDEO_PROFILE_BL_CIF30, AUDIO_PROFILE_AMR_WB },
@@ -1125,11 +1124,11 @@ static const struct {
     AVC_VIDEO_PROFILE_BL_QCIF15, AUDIO_PROFILE_AMR_WB },
   { &avc_3gpp_bl_qcif15_amr, CT_3GP,
     AVC_VIDEO_PROFILE_BL_QCIF15, AUDIO_PROFILE_AMR },
-  
+
   { NULL, 0, 0, 0 }
 };
 
-static _inline int
+static inline int
 is_valid_video_profile (video_properties_t res[],
                         int size, AVCodecContext *vc)
 {
@@ -1153,7 +1152,7 @@ avc_video_get_profile (AVFormatContext *ctx, AVStream *vs, AVCodecContext *vc)
   if (vc->bit_rate <= 384000 && ctx->bit_rate <= 600000 &&
       vc->width == 320 && vc->height == 240)
     return AVC_VIDEO_PROFILE_BL_L12_CIF15;
-  
+
   /* CIF */
   if (is_valid_video_profile (profile_cif_res,
                               sizeof (profile_cif_res), vc))
@@ -1166,35 +1165,35 @@ avc_video_get_profile (AVFormatContext *ctx, AVStream *vs, AVCodecContext *vc)
       else
         return AVC_VIDEO_PROFILE_BL_L1B_QCIF;
     }
-    
+
     /* CIF15 */
     if (ctx->bit_rate <= 520000) /* 520 kbps max system bitrate */
       return AVC_VIDEO_PROFILE_BL_CIF15_520;
     if (ctx->bit_rate <= 540000) /* 540 kbps max system bitrate */
       return AVC_VIDEO_PROFILE_BL_CIF15_540;
-    
+
     /* 384 kbps max video bitrate */
     if (vc->bit_rate <= 384000 && ctx->bit_rate <= 600000)
       return AVC_VIDEO_PROFILE_BL_CIF15;
-    
+
     /* CIF30 */
     if (ctx->bit_rate <= 940000) /* 940 kbps max system bitrate */
       return AVC_VIDEO_PROFILE_BL_CIF30_940;
     if (ctx->bit_rate <= 1300000) /* 1.3 Mbps kbps max system bitrate */
       return AVC_VIDEO_PROFILE_BL_L2_CIF30;
-    
+
     /* 2 Mbps max video bitrate */
-    if (vc->bit_rate <= 2000000 && ctx->bit_rate <= 3000000) 
+    if (vc->bit_rate <= 2000000 && ctx->bit_rate <= 3000000)
       return AVC_VIDEO_PROFILE_BL_CIF30;
   }
-  
+
   /* SD */
   if (vc->bit_rate <= 4000000 /* 4 Mbps max */
       && is_valid_video_profile (profile_mp_l3_sd_res,
                                  sizeof (profile_mp_l3_sd_res), vc))
     return AVC_VIDEO_PROFILE_BL_L3_SD;
   /* what is BL_L3L ?? */
-  
+
   if (vc->bit_rate <= 10000000 /* 10 Mbps max */
       && is_valid_video_profile (profile_mp_sd_res,
                                  sizeof (profile_mp_sd_res), vc))
@@ -1214,7 +1213,7 @@ avc_video_get_profile (AVFormatContext *ctx, AVStream *vs, AVCodecContext *vc)
     if (vc->height == 1080 || vc->height == 720 || vc->height == 480)
       return AVC_VIDEO_PROFILE_MP_HD;
   }
-  
+
   return AVC_VIDEO_PROFILE_INVALID;
 }
 
@@ -1226,12 +1225,12 @@ probe_avc (AVFormatContext *ctx,
   avc_video_profile_t vp;
   audio_profile_t ap;
   int i;
-  
+
   if (!stream_ctx_is_av (codecs))
     return NULL;
 
   /* check for H.264/AVC codec */
-  if (codecs->vc->codec_id != CODEC_ID_H264)
+  if (codecs->vc->codec_id != AV_CODEC_ID_H264)
     return NULL;
 
   /* check for a supported container */
@@ -1262,21 +1261,21 @@ probe_avc (AVFormatContext *ctx,
     ap = AUDIO_PROFILE_AAC;
   if (ap == AUDIO_PROFILE_AAC_HE_L2_320)
     ap =  AUDIO_PROFILE_AAC_HE_L2;
-  
+
   /* find profile according to container type, video and audio profiles */
   for (i = 0; avc_profiles_mapping[i].profile; i++)
     if (avc_profiles_mapping[i].st == st &&
         avc_profiles_mapping[i].vp == vp &&
         avc_profiles_mapping[i].ap == ap)
       return avc_profiles_mapping[i].profile;
-  
+
   return NULL;
 }
 
 dlna_registered_profile_t dlna_profile_av_mpeg4_part10 = {
-DOT_ID DLNA_PROFILE_AV_MPEG4_PART10,
-DOT_CLASS DLNA_CLASS_AV,
-DOT_EXTENSIONS "mov,hdmov,mp4,3gp,3gpp,mpg,mpeg,mpe,mp2t,ts",
-DOT_PROBE probe_avc,
-DOT_NEXT NULL
+   DLNA_PROFILE_AV_MPEG4_PART10,
+  DLNA_CLASS_AV,
+  "mov,hdmov,mp4,3gp,3gpp,mpg,mpeg,mpe,mp2t,ts",
+  probe_avc,
+  NULL
 };
